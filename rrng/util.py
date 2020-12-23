@@ -17,11 +17,13 @@ def write_to_csv(G, pos, name1="graph.csv", name2="graph_loc.csv", dir="graph"):
     path2 = os.path.join(dir, name2)
     f1 = open(path1, "w")
     f2 = open(path2, "w")
-    
-    f2.write("{},{}\n".format(G.number_of_nodes(), G.number_of_edges()))
-    for u in G.node():
-        f2.write("{},{},{}\n".format(u, pos[u, 0], pos[u, 1]))
-        for v in G[u]:
+
+    nodes = sorted(G.nodes())
+    f1.write("{},{},-1\n".format(G.number_of_nodes(), G.number_of_edges()))
+    f2.write("{},{},-1\n".format(G.number_of_nodes(), G.number_of_edges()))
+    for u in nodes:
+        f2.write("{},{},{}\n".format(u, pos[u][0], pos[u][1]))
+        for v in sorted(G[u]):
             if u < v:
                 f1.write("{},{},{}\n".format(u, v, G[u][v]['weight']))
 
@@ -191,5 +193,5 @@ def clean_up(G, verbose=False):
         # next iteration node number
         new_node_c += 1
 
-    G = merge(G, δ=5.)
+    # G = merge(G, δ=5.)
     return G, pos
